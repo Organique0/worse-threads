@@ -27,7 +27,6 @@ import { updateUser } from "@/lib/actions/user.actions";
 interface AccoutProfileProps {
     user: {
         id: string;
-        objectId: string;
         username: string;
         name: string;
         bio: string;
@@ -36,7 +35,7 @@ interface AccoutProfileProps {
     btnTitle: string;
 }
 
-export default function AccountProfile({ user }: AccoutProfileProps) {
+export default function AccountProfile({ user, btnTitle }: AccoutProfileProps) {
     const [files, setFiles] = useState<File[]>([]);
     const router = useRouter();
     const pathname = usePathname();
@@ -181,7 +180,7 @@ export default function AccountProfile({ user }: AccoutProfileProps) {
                     )}
                 />
 
-                <Button type="submit" className="bg-primary-500">Submit</Button>
+                <Button type="submit" className="bg-primary-500">{btnTitle}</Button>
             </form>
         </Form>
     )

@@ -24,7 +24,7 @@ export async function updateUser({ userId, username, name, bio, image, path }: U
                 name,
                 bio,
                 image,
-                path
+                onBoarded: true,
             },
             { upsert: true }
         );
@@ -34,5 +34,14 @@ export async function updateUser({ userId, username, name, bio, image, path }: U
         }
     } catch (error: any) {
         throw new Error(`Failed to update user ${userId}: ${error.message}`)
+    }
+}
+
+export async function fetchUser(userId: string) {
+    try {
+        connectToDB();
+        return await User.findOne({ id: userId });
+    } catch (error) {
+        throw new Error("failed to fetch user");
     }
 }
