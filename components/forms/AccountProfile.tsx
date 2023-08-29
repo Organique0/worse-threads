@@ -7,6 +7,7 @@ import { useUploadThing } from "@/lib/uploadthing";
 import { UserValidation } from "@/lib/validations/user";
 import { Button } from "@/components/ui/button"
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import {
     Form,
     FormControl,
@@ -20,6 +21,7 @@ import { Input } from "@/components/ui/input"
 import { ChangeEvent, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { isBase64Image } from "@/lib/utils";
+import { updateUser } from "@/lib/actions/user.actions";
 
 
 interface AccoutProfileProps {
@@ -34,8 +36,10 @@ interface AccoutProfileProps {
     btnTitle: string;
 }
 
-export default function AccountProfile({ user, btnTitle }: AccoutProfileProps) {
+export default function AccountProfile({ user }: AccoutProfileProps) {
     const [files, setFiles] = useState<File[]>([]);
+    const router = useRouter();
+    const pathname = usePathname();
     const { startUpload } = useUploadThing("imageUploader");
     const form = useForm({
         resolver: zodResolver(UserValidation),
@@ -58,7 +62,20 @@ export default function AccountProfile({ user, btnTitle }: AccoutProfileProps) {
             }
         }
 
-        //TODO: Update the user
+        await updateUser({
+            userId: user.id,
+            username: values.username,
+            name: values.name,
+            bio: values.bio,
+            image: values.image,
+            path: pathname,
+        });
+
+        if (pathname === "/profile/edit") {
+            router.back();
+        } else {
+            router.push("/");
+        }
     }
 
     function uploadImage(e: ChangeEvent<HTMLInputElement>, fieldChange: (value: string) => void) {
