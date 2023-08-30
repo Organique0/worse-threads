@@ -43,7 +43,7 @@ const ThreadCard = ({ id, currentUserId, parentId, comments, author, community, 
                             <h4 className="cursor-pointer text-base-semibold text-light-1">{author.name}</h4>
                         </Link>
                         <p className="mt-2 text-small-regular text-light-2">{text}</p>
-                        <div className="mt-5 flex flex-col gap-3">
+                        <div className={`${isComment && "mb-10"} "mt-5 flex flex-col gap-3"`}>
                             <div className="flex gap-3.5">
                                 <Link href={`/thread/${id}`}>
                                     <Image src="/assets/reply.svg" width={24} height={24} alt="reply" className="cursor-ponter object-contain" />
