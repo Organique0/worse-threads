@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 
 const userSchema = new mongoose.Schema({
     id: { type: String, required: true },
@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema({
     communities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Community' }],
 });
 
-const User = mongoose.models.User || mongoose.model('User', userSchema);
+type User = InferSchemaType<typeof userSchema>;
+
+const User = mongoose.models?.User || mongoose.model<User>('User', userSchema);
 
 export default User;

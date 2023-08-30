@@ -124,6 +124,7 @@ export default function AccountProfile({ user, btnTitle }: AccoutProfileProps) {
                                     onChange={(e) => uploadImage(e, field.onChange)}
                                 />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
@@ -141,6 +142,7 @@ export default function AccountProfile({ user, btnTitle }: AccoutProfileProps) {
                                     {...field}
                                 />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
@@ -158,6 +160,7 @@ export default function AccountProfile({ user, btnTitle }: AccoutProfileProps) {
                                     {...field}
                                 />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
@@ -176,6 +179,7 @@ export default function AccountProfile({ user, btnTitle }: AccoutProfileProps) {
                                     {...field}
                                 />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
