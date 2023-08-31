@@ -75,11 +75,15 @@ export async function fetchThreadById(id: string) {
     connectToDB();
     try {
         const thread = await Thread.findById(id)
-            .populate({
+            .populate([{
                 path: "author",
                 model: User,
                 select: "_id id name image"
-            })
+            }, {
+                path: "community",
+                model: Community,
+                select: "id name image"
+            }])
             .populate({
                 path: "children",
                 populate: [

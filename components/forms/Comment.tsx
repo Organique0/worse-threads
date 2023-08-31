@@ -20,6 +20,7 @@ import { ChangeEvent, useState } from "react";
 import { updateUser } from "@/lib/actions/user.actions";
 import { addCommentToThread, createThread } from "@/lib/actions/thread.action";
 import Image from "next/image";
+import { useOrganization } from "@clerk/nextjs";
 
 interface CommentProps {
     postId: string,
@@ -29,7 +30,9 @@ interface CommentProps {
 
 
 export default function Comment({ postId, currentUserImage, currentUserId }: CommentProps) {
-    const router = useRouter();
+
+    const { organization } = useOrganization();
+    console.log("organization" + organization);
     const pathname = usePathname();
 
     const form = useForm({
@@ -40,7 +43,7 @@ export default function Comment({ postId, currentUserImage, currentUserId }: Com
     });
 
     async function onSubmit(values: z.infer<typeof CommentValidation>) {
-        await addCommentToThread(postId, values.thread, JSON.parse(currentUserId), pathname)
+        await addCommentToThread(postId, values.thread, JSON.parse(currentUserId), pathname,)
 
         form.reset();
     }
