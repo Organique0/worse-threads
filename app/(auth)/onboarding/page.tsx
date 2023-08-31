@@ -14,8 +14,6 @@ export default async function Page() {
 
     if (userInfo?.onBoarded) redirect("/");
 
-    console.log(userInfo);
-
     const userData = {
         id: user.id,
         username: userInfo ? userInfo?.username : user.username,
