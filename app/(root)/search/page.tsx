@@ -1,4 +1,5 @@
-import React from 'react'
+"use client";
+import React, { useCallback, useEffect, useState } from 'react'
 import PostThread from "@/components/forms/PostThread";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import ThreadsTab from "@/components/shared/ThreadsTab";
@@ -10,48 +11,69 @@ import { currentUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import UserCard from '@/components/cards/UserCard';
+import { Input } from '@/components/ui/input';
+import { SearchUsers } from '@/lib/actions/search.actions';
+import axios from "axios";
+import { Button } from '@/components/ui/button';
 
-const page = async () => {
-    const user = await currentUser();
-    if (!user) return null;
+const page = () => {
+    const [query, setQuery] = useState('');
+    const [result, setResult] = useState<User[]>([]);
+    const [mounted, setMounted] = useState(false);
 
-    const userInfo = await fetchUser(user.id);
+    const calculate = useCallback(async (query: string) => {
+        if (query.trim() !== '') {
+            try {
+                const response = await axios.get(`/api/search?query=${query}`);
+                setResult(response.data);
+            } catch (error) {
+                console.error('Error fetching search results:', error);
+            }
+        } else {
+            setResult([]);
+        }
+    }, []);
 
+    useEffect(() => {
+        calculate(query);
+    }, [query, calculate])
 
-    if (!userInfo?.onBoarded) redirect("/onboarding");
+    useEffect(() => {
+        setMounted(true);
+    }, [])
 
-    const result = await fetchUsers({
-        userId: user.id,
-        searchString: '',
-        pageNumber: 1,
-        pageSize: 25,
-    });
     return (
-        <section>
-            <h1 className='head-text mb-10'>
-                search
-            </h1>
-            <div className='mt-14 flex flex-col gap-9'>
-                {result.users.length === 0
-                    ? <p className='no-result'>no users</p>
-                    : (
-                        <>
-                            {result.users.map((person) => (
-                                <UserCard
-                                    key={person.id}
-                                    id={person.id}
-                                    name={person.name}
-                                    username={person.username}
-                                    imgUrl={person.image}
-                                    personType="User"
-                                />
-                            ))}
-                        </>
-                    )
-                }
-            </div>
-        </section>
-    )
-}
+        <>
+            {mounted && (
+                <section>
+                    <h1 className='head-text mb-10'>Search users</h1>
+                    <div className='mt-4 flex'>
+                        <Input
+                            type='search'
+                            placeholder='Search by user name'
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            autoComplete='off'
+                        />
 
-export default page
+                    </div>
+                    <div className='mt-14 flex flex-col gap-9'>
+                        {query.trim() !== '' && result.length > 0 && result.map((user) => (
+                            <UserCard
+                                key={user.id}
+                                id={user.id}
+                                username={user.username}
+                                name={user.name}
+                                imgUrl={user.image as string}
+                                personType=''
+                            />
+                        ))}
+                    </div>
+                </section>
+            )
+            }</>
+
+    )
+};
+
+export default page;
