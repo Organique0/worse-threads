@@ -33,7 +33,7 @@ const page = async () => {
             </h1>
             <div className='mt-14 flex flex-col gap-9'>
                 {result.users.length === 0
-                    ? <p className='no-result'>not users</p>
+                    ? <p className='no-result'>no users</p>
                     : (
                         <>
                             {result.users.map((person) => (

@@ -5,6 +5,7 @@ import User from "../models/user.model";
 import { connectToDB } from "../mongoose"
 import Thread from "../models/thread.model";
 import { FilterQuery, SortOrder } from "mongoose";
+import Community from "../models/community.model";
 
 interface UpdateUserParams {
     userId: string;
@@ -55,7 +56,7 @@ export async function fetchUserPosts(userId: string) {
             .populate({
                 path: "threads",
                 model: Thread,
-                populate: {
+                populate: [{
                     path: "children",
                     model: Thread,
                     populate: {
@@ -63,8 +64,14 @@ export async function fetchUserPosts(userId: string) {
                         model: User,
                         select: "name image id "
                     }
+                },
+                {
+                    path: "community",
+                    model: Community,
+                    select: "id name image"
                 }
-            })
+                ]
+            }).exec();
 
         return threads;
     } catch (error: any) {

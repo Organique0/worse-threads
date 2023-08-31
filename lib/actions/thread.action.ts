@@ -5,6 +5,7 @@ import User from "../models/user.model";
 import { connectToDB } from "../mongoose";
 import mongoose, { ObjectId } from "mongoose";
 import { skip } from "node:test";
+import Community from "../models/community.model";
 
 interface createThreadParams {
     text: string;
@@ -16,15 +17,26 @@ interface createThreadParams {
 export async function createThread({ text, author, communityId, path }: createThreadParams) {
     connectToDB();
 
+    const communityIdObject = await Community.findOne(
+        { id: communityId },
+        { _id: 1 }
+    );
+
     const createdThread = await Thread.create({
         text,
         author: mongoose.Types.ObjectId.createFromHexString(author),
-        community: null,
+        community: communityIdObject,
     });
 
     await User.findByIdAndUpdate(author, {
         $push: { threads: createdThread._id }
     })
+
+    if (communityIdObject) {
+        await Community.findByIdAndUpdate(communityIdObject, {
+            $push: { threads: createdThread._id }
+        })
+    }
 
     revalidatePath(path);
 }
@@ -43,6 +55,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
         .sort({ createdAt: 'desc' })
         .skip(skipAmount)
         .populate({ path: "author", model: User })
+        .populate({ path: "community", model: Community })
         .populate({ path: "children", populate: { path: "author", model: User, select: "_id name parentId image" } })
 
     const totalPostsCount = await Thread.countDocuments({
@@ -85,7 +98,7 @@ export async function fetchThreadById(id: string) {
                         }
                     }
                 ]
-            }).exec();
+            });
         return thread;
     } catch (error) {
         throw new Error("error fetching a thread")

@@ -60,7 +60,7 @@ export async function fetchCommunityDetails(id: string) {
                 model: User,
                 select: "name username image _id id",
             },
-        ]);
+        ]).exec();
 
         return communityDetails;
     } catch (error) {
@@ -74,7 +74,7 @@ export async function fetchCommunityPosts(id: string) {
     try {
         connectToDB();
 
-        const communityPosts = await Community.findById(id).populate({
+        const communityPosts = await Community.findOne({ id: id }).populate({
             path: "threads",
             model: Thread,
             populate: [
@@ -92,9 +92,13 @@ export async function fetchCommunityPosts(id: string) {
                         select: "image _id", // Select the "name" and "_id" fields from the "User" model
                     },
                 },
+                {
+                    path: "community",
+                    model: Community,
+                    select: "id name image"
+                }
             ],
-        });
-
+        })
         return communityPosts;
     } catch (error) {
         // Handle any errors
