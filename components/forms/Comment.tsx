@@ -30,9 +30,8 @@ interface CommentProps {
 
 
 export default function Comment({ postId, currentUserImage, currentUserId }: CommentProps) {
-
     const { organization } = useOrganization();
-    console.log("organization" + organization);
+
     const pathname = usePathname();
 
     const form = useForm({
@@ -43,7 +42,7 @@ export default function Comment({ postId, currentUserImage, currentUserId }: Com
     });
 
     async function onSubmit(values: z.infer<typeof CommentValidation>) {
-        await addCommentToThread(postId, values.thread, JSON.parse(currentUserId), pathname,)
+        await addCommentToThread(postId, values.thread, JSON.parse(currentUserId), pathname, organization?.id)
 
         form.reset();
     }

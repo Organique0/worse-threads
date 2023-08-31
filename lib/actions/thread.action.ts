@@ -109,8 +109,13 @@ export async function fetchThreadById(id: string) {
     }
 }
 
-export async function addCommentToThread(threadId: string, commentText: string, userId: string, path: string) {
+export async function addCommentToThread(threadId: string, commentText: string, userId: string, path: string, organizationId?: string) {
     connectToDB();
+    const communityIdObject = await Community.findOne(
+        { id: organizationId },
+        { _id: 1 }
+    );
+    console.log(communityIdObject);
     try {
         const originalThread = await Thread.findById(threadId);
         if (!originalThread) throw new Error("thread not found");
@@ -119,6 +124,9 @@ export async function addCommentToThread(threadId: string, commentText: string, 
             text: commentText,
             author: userId,
             parentId: threadId,
+            community: communityIdObject,
+
+
         });
 
         const savedCommentThread = await commentThread.save();
