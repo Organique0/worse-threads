@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { SignOutButton, OrganizationSwitcher } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 
@@ -31,6 +31,12 @@ export default function TopBar() {
                         }
                     }} />
                     <UserButton />
+                    <SignedOut>
+                        <div className="text-light-1">
+                            <SignInButton />
+                        </div>
+                    </SignedOut>
+
                 </div>
             </div>
         </nav>
