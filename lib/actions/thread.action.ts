@@ -115,7 +115,6 @@ export async function addCommentToThread(threadId: string, commentText: string, 
         { id: organizationId },
         { _id: 1 }
     );
-    console.log(communityIdObject);
     try {
         const originalThread = await Thread.findById(threadId);
         if (!originalThread) throw new Error("thread not found");
