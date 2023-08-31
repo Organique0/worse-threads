@@ -22,17 +22,6 @@ import { updateUser } from "@/lib/actions/user.actions";
 import { createThread } from "@/lib/actions/thread.action";
 import { useOrganization } from "@clerk/nextjs";
 
-interface AccoutProfileProps {
-    user: {
-        id: string;
-        username: string;
-        name: string;
-        bio: string;
-        image: string;
-    };
-    btnTitle: string;
-}
-
 export default function PostThread({ userId }: { userId: string }) {
     const router = useRouter();
     const pathname = usePathname();
