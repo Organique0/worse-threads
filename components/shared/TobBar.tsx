@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { SignedIn } from "@clerk/nextjs";
+import { SignedIn, UserButton } from "@clerk/nextjs";
 import { SignOutButton, OrganizationSwitcher } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 
@@ -23,12 +23,15 @@ export default function TopBar() {
                         </SignOutButton>
                     </SignedIn>
                 </div>
-                <OrganizationSwitcher appearance={{
-                    baseTheme: dark,
-                    elements: {
-                        organizationSwitcherTrigger: "py-2 px-4",
-                    }
-                }} />
+                <div className="flex gap-6 items-center align-middle">
+                    <OrganizationSwitcher appearance={{
+                        baseTheme: dark,
+                        elements: {
+                            organizationSwitcherTrigger: "py-2 px-4",
+                        }
+                    }} />
+                    <UserButton />
+                </div>
             </div>
         </nav>
     )
