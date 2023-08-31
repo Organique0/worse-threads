@@ -20,7 +20,6 @@ const page = async () => {
     if (!userInfo?.onBoarded) redirect("/onboarding");
 
     const activity = await getActivity(userInfo._id);
-
     return (
         <section>
             <h1 className='head-text mb-10'>
@@ -33,7 +32,8 @@ const page = async () => {
                             activity.map(activity => (
                                 <Link key={activity._id} href={`/thread/${activity.parentId}`}>
                                     <article className='activity-card'>
-                                        <Image src={activity.author.image}
+                                        <Image
+                                            src={activity.author.image}
                                             alt='profile image'
                                             height={20}
                                             width={20}

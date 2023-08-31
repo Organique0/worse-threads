@@ -131,12 +131,12 @@ export async function getActivity(userId: string) {
         }, []);
         const replies = await Thread.find({
             _id: { $in: childPostIds },
-            author: { $ne: userId }
+            //author: { $ne: userId } @Toggle if you want to see your replies (for testing)
         }).populate(
             {
                 path: "author",
                 model: User,
-                select: "name image_id"
+                select: "name image id"
             }
         );
         return replies;
