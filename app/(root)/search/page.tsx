@@ -54,6 +54,7 @@ const page = () => {
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             autoComplete='off'
+                            className='no-focus searchbar_input'
                         />
 
                     </div>
